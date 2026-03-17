@@ -1,341 +1,586 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raman Shakya | Angular & Full Stack Developer</title>
+    <title>Raman Shakya | Software Engineer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a; 
-            --card-bg: #1e293b; 
-            --primary: #3b82f6; 
-            --primary-hover: #2563eb; 
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-        }
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            overflow-x: hidden;
-            scroll-behavior: smooth;
+            --bg-base: #09090b;
+            /* Zinc 950 */
+            --bg-surface: #18181b;
+            /* Zinc 900 */
+            --accent-primary: #10b981;
+            /* Emerald 500 */
+            --accent-secondary: #0ea5e9;
+            /* Sky 500 */
         }
 
-        .bg-mesh {
-            background-image: radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
-                              radial-gradient(circle at 85% 30%, rgba(99, 102, 241, 0.08), transparent 25%);
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: #f4f4f5;
+            overflow-x: hidden;
+        }
+
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Engineering Grid Background */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
         }
 
         .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 1rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.5);
-            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -15px rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
         }
 
-        .reveal { 
-            opacity: 0; 
-            transform: translateY(30px); 
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
-        }
-        .reveal.active { 
-            opacity: 1; 
-            transform: translateY(0); 
+        /* Smooth Fade-in Reveal Effects */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .nav-link { position: relative; color: var(--text-muted); transition: color 0.3s; }
-        .nav-link:hover { color: var(--text-main); }
-        .nav-link::after {
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-glow {
+            position: relative;
+        }
+
+        .btn-glow::before {
             content: '';
             position: absolute;
-            width: 0; height: 2px; bottom: -4px; left: 0;
-            background: var(--primary);
-            transition: width 0.3s ease-in-out;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #10b981, #0ea5e9, #10b981);
+            z-index: -1;
+            filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: inherit;
         }
-        .nav-link:hover::after { width: 100%; }
 
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+        .btn-glow:hover::before {
+            opacity: 0.7;
         }
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
+
+        /* Terminal typing animation cursor */
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
         }
-        
-        .btn-secondary {
-            background-color: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            background-color: rgba(59, 130, 246, 0.1);
-            transform: translateY(-2px);
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
         }
     </style>
 </head>
-<body class="bg-mesh">
 
-    <nav class="fixed w-full z-50 px-4 py-4 md:px-6 bg-[#0f172a]/80 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="text-xl font-semibold tracking-wide flex items-center gap-3">
-                <i data-lucide="code-2" class="w-6 h-6 text-blue-500"></i>
-                <span>Raman Shakya</span>
+<body class="relative min-h-screen">
+    <div class="fixed inset-0 bg-grid pointer-events-none z-[-1]"></div>
+
+    <div class="fixed top-4 w-full z-50 px-4 md:px-8 flex justify-center pointer-events-none">
+        <nav
+            class="w-full max-w-7xl px-5 py-3 bg-zinc-900/60 backdrop-blur-lg border border-white/10 rounded-2xl shadow-2xl flex justify-between items-center pointer-events-auto transition-all">
+            <div class="text-xl font-bold tracking-tight flex items-center gap-2 group cursor-pointer">
+                <i data-lucide="code" class="w-6 h-6 text-emerald-500 group-hover:text-sky-400 transition-colors"></i>
+                <span class="font-mono hidden sm:block">Raman Shakya</span>
             </div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#experience" class="nav-link">Experience</a>
-                <a href="#projects" class="nav-link">Projects</a>
-                <a href="#stack" class="nav-link">Skills</a>
+
+            <div class="hidden md:flex items-center space-x-6 text-sm font-medium font-mono text-zinc-400">
+                <a href="#home" class="flex items-center gap-1.5 hover:text-emerald-400 transition-colors">
+                    <i data-lucide="home" class="w-4 h-4"></i> ./home
+                </a>
+                <a href="#experience" class="flex items-center gap-1.5 hover:text-emerald-400 transition-colors">
+                    <i data-lucide="briefcase" class="w-4 h-4"></i> ./experience
+                </a>
+                <a href="#projects" class="flex items-center gap-1.5 hover:text-emerald-400 transition-colors">
+                    <i data-lucide="folder-git-2" class="w-4 h-4"></i> ./projects
+                </a>
+                <a href="#stack" class="flex items-center gap-1.5 hover:text-emerald-400 transition-colors">
+                    <i data-lucide="layers" class="w-4 h-4"></i> ./stack
+                </a>
             </div>
-            <a href="mailto:ramanshakyars12@gmail.com" class="hidden sm:flex items-center gap-2 btn-primary px-5 py-2.5 rounded-lg text-sm font-medium shadow-lg shadow-blue-500/20">
-                <i data-lucide="mail" class="w-4 h-4"></i> Let's Connect
+
+            <a href="mailto:ramanshakyars12@gmail.com"
+                class="flex items-center gap-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/50 hover:bg-emerald-500 hover:text-zinc-950 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-lg shadow-emerald-500/10">
+                <i data-lucide="send" class="w-4 h-4"></i> <span class="hidden sm:inline">Initialize Contact</span><span
+                    class="sm:hidden">Connect</span>
             </a>
-        </div>
-    </nav>
+        </nav>
+    </div>
 
-    <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20">
-        <div class="reveal">
-            <div class="mb-8 inline-flex items-center gap-2 bg-slate-800/50 border border-slate-700 px-4 py-2 rounded-full text-sm text-slate-300">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                </span>
-                Frontend-Focused Software Engineer
-            </div>
-            
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight leading-tight text-white">
-                Building Seamless <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Angular & Java</span> Applications.
-            </h1>
-            
-            <p class="text-slate-400 max-w-3xl mx-auto text-base md:text-lg font-light mb-10 leading-relaxed">
-                Specializing in crafting scalable frontend solutions with <strong class="text-slate-200 font-medium">Angular</strong> and robust backends with <strong class="text-slate-200 font-medium">Spring Boot</strong>. 
-                Dedicated to performance optimization and user-centric design.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row justify-center gap-4 w-full sm:w-auto">
-                <a href="#projects" class="btn-primary px-8 py-3.5 rounded-lg font-medium flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20">
-                    View Portfolio <i data-lucide="layout" class="w-4 h-4"></i>
-                </a>
-                <a href="#" class="btn-secondary px-8 py-3.5 rounded-lg font-medium flex items-center justify-center gap-2">
-                    <i data-lucide="download" class="w-4 h-4"></i> Download CV
-                </a>
-            </div>
-        </div>
-    </section>
+    <section id="home" class="min-h-screen flex flex-col justify-center pt-32 pb-12 px-6">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center w-full">
 
-    <section id="experience" class="py-24 px-6 max-w-7xl mx-auto border-t border-slate-800">
-        <div class="grid lg:grid-cols-12 gap-12 items-start">
-            <div class="lg:col-span-4 reveal">
-                <h2 class="text-xs font-bold text-blue-500 uppercase tracking-widest mb-3">Professional Journey</h2>
-                <h3 class="text-3xl md:text-4xl font-bold mb-6 text-white">2.6+ Years of <br>Industry Expertise</h3>
-                <p class="text-slate-400 leading-relaxed mb-8">
-                    Focusing on modular UI development and secure RESTful integrations within Agile environments.
+            <div class="reveal">
+                <div
+                    class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-full text-xs font-mono text-emerald-400 mb-8">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    System.out.println("Available for new challenges");
+                </div>
+
+                <h1
+                    class="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight leading-tight text-white">
+                    Crafting <span class="text-gradient">Dynamic</span> <br>
+                    Web Experiences.
+                </h1>
+
+                <p class="text-zinc-400 max-w-xl text-lg font-light mb-10 leading-relaxed">
+                    Frontend-focused Full Stack Software Engineer specializing in building scalable, responsive web applications using
+                    <span
+                        class="text-zinc-200 font-medium border-b border-emerald-500 border-dashed">Angular, TypeScript, and Spring Boot.</span>
                 </p>
-                <div class="glass-card p-6 flex items-center gap-4 border-l-4 border-l-blue-500">
-                    <div class="p-3 bg-blue-500/10 rounded-lg text-blue-400">
-                        <i data-lucide="briefcase" class="w-6 h-6"></i>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#projects"
+                        class="btn-glow bg-emerald-500 text-zinc-950 px-8 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-emerald-400 transition-colors">
+                        Execute Portfolio <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                    </a>
+                    <a href="assets/Raman-Shakya-Frontend-Developer-angular.pdf" download="Raman_Shakya_Resume.pdf"
+                        class="bg-zinc-800/50 border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 px-8 py-3.5 rounded-xl font-medium flex items-center justify-center gap-2 transition-all backdrop-blur-sm">
+                        <i data-lucide="file-json" class="w-4 h-4"></i> view_resume.pdf
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-zinc-800/50">
+                    <div>
+                        <h4 class="text-3xl font-bold text-white mb-1">2.6<span class="text-emerald-500">+</span></h4>
+                        <p class="text-xs font-mono text-zinc-500">Years Exp</p>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold text-white">S2Infinitum</div>
-                        <div class="text-sm text-slate-400 font-medium">Software Engineer</div>
+                        <h4 class="text-3xl font-bold text-white mb-1">4<span class="text-emerald-500">+</span></h4>
+                        <p class="text-xs font-mono text-zinc-500">Core Stacks</p>
+                    </div>
+                    <div>
+                        <h4 class="text-3xl font-bold text-white mb-1">100<span class="text-emerald-500">%</span></h4>
+                        <p class="text-xs font-mono text-zinc-500">Commitment</p>
                     </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-8 space-y-6 reveal" style="transition-delay: 0.2s;">
-                <div class="glass-card p-8">
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-4">
-                        <div>
-                            <h4 class="text-xl font-bold text-white mb-1">Software Engineer (Frontend Focus)</h4>
-                            <p class="text-blue-400 font-medium text-sm">S2Infinitum Softech Pvt Ltd</p>
+            <div class="reveal glass-card overflow-hidden shadow-2xl relative" style="transition-delay: 0.2s;">
+                <div class="flex items-center px-4 py-3 bg-zinc-900/80 border-b border-zinc-800">
+                    <div class="flex space-x-2">
+                        <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                    </div>
+                    <div class="mx-auto text-xs font-mono text-zinc-500 flex items-center gap-2">
+                        <i data-lucide="code-2" class="w-3 h-3"></i> raman_config.ts
+                    </div>
+                </div>
+                <div class="p-6 font-mono text-sm leading-relaxed overflow-x-auto">
+                    <p><span class="text-rose-400">const</span> <span class="text-sky-400">developer</span> = {</p>
+                    <p class="pl-6">name: <span class="text-amber-300">'Raman Shakya'</span>,</p>
+                    <p class="pl-6">role: <span class="text-amber-300">'Software Engineer'</span>,</p>
+                    <p class="pl-6">location: <span class="text-amber-300">'Noida, India'</span>,</p>
+                    <p class="pl-6">skills: {</p>
+                    <p class="pl-12">frontend: [<span class="text-amber-300">'Angular'</span>, <span
+                            class="text-amber-300">'TypeScript'</span>, <span class="text-amber-300">'SCSS'</span>],
+                    </p>
+                    <p class="pl-12">backend: [<span class="text-amber-300">'Spring Boot'</span>, <span
+                            class="text-amber-300">'REST APIs'</span>],</p>
+                    <p class="pl-12">database: [<span class="text-amber-300">'MySQL'</span>, <span class="text-amber-300">'MongoDB'</span>],</p>
+                    <p class="pl-12">tools: [<span class="text-amber-300">'Git'</span>, <span
+                            class="text-amber-300">'Jira'</span>, <span class="text-amber-300">'Postman'</span>]
+                    </p>
+                    <p class="pl-6">},</p>
+                    <p class="pl-6">getCurrentFocus: <span class="text-rose-400">function</span>() {</p>
+                    <p class="pl-12 text-zinc-400">// Translating requirements into user-centric solutions</p>
+                    <p class="pl-12"><span class="text-rose-400">return</span> <span class="text-amber-300">'Building
+                            seamless web solutions'</span>;</p>
+                    <p class="pl-6">}</p>
+                    <p>};<span class="cursor-blink text-emerald-500 font-bold">|</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="py-24 px-6 relative border-t border-zinc-800/50 bg-zinc-900/20">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-16 reveal">
+                <h2 class="text-sm font-mono text-emerald-500 mb-3 flex items-center gap-2"><i data-lucide="git-commit"
+                        class="w-4 h-4"></i> ~ ./career --log</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-white">Experience Trajectory</h3>
+            </div>
+
+            <div class="space-y-12">
+
+                <div class="relative md:grid md:grid-cols-5 items-start gap-8 reveal">
+                    <div class="hidden md:block col-span-1 text-right pt-2">
+                        <span class="font-mono text-sm text-zinc-500">Feb 2023 - Present</span>
+                    </div>
+
+                    <div class="md:col-span-4 relative border-l border-zinc-700 pl-6 md:pl-8">
+                        <div
+                            class="absolute -left-[9px] top-2.5 w-4 h-4 rounded-full bg-zinc-900 border-2 border-emerald-500 ring-4 ring-zinc-950">
                         </div>
-                        <span class="text-sm font-medium text-slate-400 bg-slate-800/50 border border-slate-700 px-3 py-1.5 rounded-md whitespace-nowrap">
-                            02/2023 – Present
-                        </span>
-                    </div>
-                    
-                    <ul class="space-y-4 text-slate-300 text-sm leading-relaxed">
-                        <li class="flex gap-3 items-start">
-                            <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i> 
-                            <span>Developed modular UI components for billing, patient records, and insight dashboards using <strong>Angular</strong>.</span>
-                        </li>
-                        <li class="flex gap-3 items-start">
-                            <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i> 
-                            <span>Built <strong>RBAC (Role-Based Access Control)</strong> systems and Lead Management workflows for Real Estate solutions.</span>
-                        </li>
-                        <li class="flex gap-3 items-start">
-                            <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i> 
-                            <span>Implemented <strong>JWT Authentication</strong> services and multi-step reactive forms with complex validations.</span>
-                        </li>
-                        <li class="flex gap-3 items-start">
-                            <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 shrink-0 mt-0.5"></i> 
-                            <span>Managed dynamic data rendering in <strong>multi-tenant UI</strong> environments with scoped styling.</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="glass-card p-6 flex flex-col sm:flex-row items-center gap-6">
-                    <div class="p-4 bg-slate-800 rounded-full border border-slate-700">
-                        <i data-lucide="graduation-cap" class="w-6 h-6 text-slate-300"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-bold text-white">Master of Computer Applications (AI)</h4>
-                        <p class="text-slate-400 text-sm">Amity University, Noida</p>
-                        <p class="text-sm text-slate-500 mt-1">2024 – 2026 (Pursuing)</p>
+
+                        <div class="glass-card p-6 md:p-8">
+                            <div class="mb-5">
+                                <h4 class="text-xl font-bold text-white">Software Engineer</h4>
+                                <p class="text-emerald-400 font-mono text-sm mt-1">@ S2infinitum Softech Pvt Ltd
+                                </p>
+                                <span class="md:hidden font-mono text-xs text-zinc-500 block mt-2">Feb 2023 -
+                                    Present</span>
+                            </div>
+
+                            <ul class="space-y-3 text-zinc-400 text-sm leading-relaxed">
+                                <li class="flex gap-3 items-start">
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                                    <span>Developed modular UI components using <strong>Angular</strong>, creating dynamic dashboards, multi-step forms, and role-based access control flows.</span>
+                                </li>
+                                <li class="flex gap-3 items-start">
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                                    <span>Built and integrated REST APIs via <strong>Spring Boot</strong> for seamless data exchange between front-end modules and robust backend services.</span>
+                                </li>
+                                <li class="flex gap-3 items-start">
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                                    <span>Designed enterprise solutions like an HRMS, E-COM platforms, and Healthcare Patient Workflows, focusing on data security and JWT Authentication.</span>
+                                </li>
+                                <li class="flex gap-3 items-start">
+                                    <i data-lucide="chevron-right" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                                    <span>Optimized performance and cross-browser compatibility, working alongside cross-functional teams using <strong>Agile (Jira)</strong> workflows.</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
+
+                <div class="relative md:grid md:grid-cols-5 items-start gap-8 reveal">
+                    <div class="hidden md:block col-span-1 text-right pt-2">
+                        <span class="font-mono text-sm text-zinc-500">Aug 2024 - 2026</span>
+                    </div>
+
+                    <div class="md:col-span-4 relative border-l border-zinc-700 pl-6 md:pl-8">
+                        <div
+                            class="absolute -left-[9px] top-2.5 w-4 h-4 rounded-full bg-zinc-900 border-2 border-zinc-600 ring-4 ring-zinc-950">
+                        </div>
+
+                        <div
+                            class="p-6 border border-zinc-800/50 rounded-xl bg-zinc-900/30 flex flex-col sm:flex-row items-center gap-6">
+                            <div class="p-4 bg-zinc-800/50 rounded-lg text-zinc-400">
+                                <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Master of Computer Applications (AI)</h4>
+                                <p class="text-zinc-400 text-sm">Amity University, Noida</p>
+                                <span class="md:hidden font-mono text-xs text-zinc-500 block mt-1">Aug 2024 - Jul 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative md:grid md:grid-cols-5 items-start gap-8 reveal">
+                    <div class="hidden md:block col-span-1 text-right pt-2">
+                        <span class="font-mono text-sm text-zinc-500">2020 - 2023</span>
+                    </div>
+
+                    <div class="md:col-span-4 relative border-l border-zinc-700 pl-6 md:pl-8">
+                        <div
+                            class="absolute -left-[9px] top-2.5 w-4 h-4 rounded-full bg-zinc-900 border-2 border-zinc-600 ring-4 ring-zinc-950">
+                        </div>
+
+                        <div
+                            class="p-6 border border-zinc-800/50 rounded-xl bg-zinc-900/30 flex flex-col sm:flex-row items-center gap-6">
+                            <div class="p-4 bg-zinc-800/50 rounded-lg text-zinc-400">
+                                <i data-lucide="book" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white">BCA</h4>
+                                <p class="text-zinc-400 text-sm">Sir Madanlal Group Of Institutions (CSJMU)</p>
+                                <span class="md:hidden font-mono text-xs text-zinc-500 block mt-1">2020 - 2023</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <section id="projects" class="py-24 px-6 max-w-7xl mx-auto border-t border-slate-800">
-        <div class="text-center mb-16 reveal">
-            <h2 class="text-xs font-bold text-blue-500 uppercase tracking-widest mb-3">Portfolio</h2>
-            <h3 class="text-3xl md:text-4xl font-bold text-white">Impactful Projects</h3>
+    <section id="projects" class="py-24 px-6 max-w-7xl mx-auto border-t border-zinc-800/50">
+        <div class="mb-16 reveal">
+            <h2 class="text-sm font-mono text-emerald-500 mb-3 flex items-center gap-2"><i data-lucide="terminal"
+                    class="w-4 h-4"></i> ~ ./projects --featured</h2>
+            <h3 class="text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
+                System Architectures <i data-lucide="cpu" class="w-8 h-8 text-zinc-600"></i>
+            </h3>
         </div>
-        
+
         <div class="grid lg:grid-cols-3 gap-6">
-            <div class="glass-card p-8 flex flex-col h-full reveal">
-                <div class="mb-6 text-blue-400">
-                    <i data-lucide="building-2" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Real Estate Management</h3>
-                <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
-                    Engineered an RBAC-driven system for lead tracking, team assignments, and performance monitoring with a focus on administrative efficiency.
-                </p>
-                <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-700/50">
-                    <span class="text-xs font-medium bg-slate-800 px-2.5 py-1 rounded text-slate-300">Angular</span>
-                    <span class="text-xs font-medium bg-slate-800 px-2.5 py-1 rounded text-slate-300">TypeScript</span>
-                    <span class="text-xs font-medium bg-slate-800 px-2.5 py-1 rounded text-slate-300">Agile</span>
+            <div class="glass-card p-1 group reveal flex flex-col h-full">
+                <div class="bg-zinc-900 p-6 rounded-[0.85rem] h-full flex flex-col relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 rounded-bl-full blur-2xl transition-all group-hover:bg-sky-500/20">
+                    </div>
+
+                    <div class="flex justify-between items-start mb-6 z-10">
+                        <div class="p-3 bg-zinc-800 rounded-lg text-sky-400 border border-zinc-700">
+                            <i data-lucide="building" class="w-6 h-6"></i>
+                        </div>
+                        <a href="#" class="text-zinc-500 hover:text-white transition-colors"><i
+                                data-lucide="external-link" class="w-5 h-5"></i></a>
+                    </div>
+
+                    <h3 class="text-xl font-bold mb-3 text-white z-10">Real Estate Management</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed mb-6 flex-grow z-10">
+                        Admin platform with role-based access control, complex lead tracking workflows, and team assignment configurations utilizing state management.
+                    </p>
+
+                    <div class="flex flex-wrap gap-2 pt-4 border-t border-zinc-800/80 z-10">
+                        <span
+                            class="text-xs font-mono bg-zinc-950 border border-zinc-800 px-2 py-1 rounded text-sky-300">Angular</span>
+                        <span
+                            class="text-xs font-mono bg-zinc-950 border border-zinc-800 px-2 py-1 rounded text-rose-300">TypeScript</span>
+                        <span
+                            class="text-xs font-mono bg-zinc-950 border border-zinc-800 px-2 py-1 rounded text-emerald-300">RBAC</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="glass-card p-8 flex flex-col h-full reveal" style="transition-delay: 0.1s;">
-                <div class="mb-6 text-indigo-400">
-                    <i data-lucide="stethoscope" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Assent Med Tech</h3>
-                <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
-                    Developed patient-doctor workflows, integrating secure APIs and dynamic forms to streamline healthcare record management and feedback analysis.
-                </p>
-                <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-700/50">
-                    <span class="text-xs font-medium bg-slate-800 px-2.5 py-1 rounded text-slate-300">Angular Material</span>
-                    <span class="text-xs font-medium bg-slate-800 px-2.5 py-1 rounded text-slate-300">REST API</span>
-                    <span class="text-xs font-medium bg-slate-800 px-2.5 py-1 rounded text-slate-300">Data Security</span>
+            <div class="glass-card p-1 group reveal flex flex-col h-full" style="transition-delay: 0.1s;">
+                <div class="bg-zinc-900 p-6 rounded-[0.85rem] h-full flex flex-col relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-bl-full blur-2xl transition-all group-hover:bg-emerald-500/20">
+                    </div>
+
+                    <div class="flex justify-between items-start mb-6 z-10">
+                        <div class="p-3 bg-zinc-800 rounded-lg text-emerald-400 border border-zinc-700">
+                            <i data-lucide="stethoscope" class="w-6 h-6"></i>
+                        </div>
+                        <a href="#" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="external-link"
+                                class="w-5 h-5"></i></a>
+                    </div>
+
+                    <h3 class="text-xl font-bold mb-3 text-white z-10">Assent Med Tech</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed mb-6 flex-grow z-10">
+                        Clinical workflows to streamline patient records. Integrated API communication between doctors and patients, handling dynamic multi-step forms.
+                    </p>
+
+                    <div class="flex flex-wrap gap-2 pt-4 border-t border-zinc-800/80 z-10">
+                        <span
+                            class="text-xs font-mono bg-zinc-950 border border-zinc-800 px-2 py-1 rounded text-sky-300">Angular</span>
+                        <span
+                            class="text-xs font-mono bg-zinc-950 border border-zinc-800 px-2 py-1 rounded text-green-300">Spring
+                            Boot</span>
+                        <span
+                            class="text-xs font-mono bg-zinc-950 border border-zinc-800 px-2 py-1 rounded text-emerald-300">REST APIs</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="glass-card p-8 flex flex-col h-full reveal" style="transition-delay: 0.2s;">
-                <div class="mb-6 text-teal-400">
-                    <i data-lucide="shopping-cart" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-white">E-COM Platform</h3>
-                <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
-                    Built a comprehensive e-commerce interface featuring JWT authentication, advanced product filtering, and an admin sales dashboard.
-                </p>
-                <div class="flex flex-wrap gap-2 pt-4 border-t border-slate-700/50">
-                    <span class="text-xs font-medium bg-slate-800 px-2.5 py-1 rounded text-slate-300">Spring Boot</span>
-                    <span class="text-xs font-medium bg-slate-800 px-2.5 py-1 rounded text-slate-300">JWT</span>
-                    <span class="text-xs font-medium bg-slate-800 px-2.5 py-1 rounded text-slate-300">MySQL</span>
+            <div class="glass-card p-1 group reveal flex flex-col h-full" style="transition-delay: 0.2s;">
+                <div class="bg-zinc-900 p-6 rounded-[0.85rem] h-full flex flex-col relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-bl-full blur-2xl transition-all group-hover:bg-amber-500/20">
+                    </div>
+
+                    <div class="flex justify-between items-start mb-6 z-10">
+                        <div class="p-3 bg-zinc-800 rounded-lg text-amber-400 border border-zinc-700">
+                            <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                        </div>
+                        <a href="#" class="text-zinc-500 hover:text-white transition-colors"><i data-lucide="external-link"
+                                class="w-5 h-5"></i></a>
+                    </div>
+
+                    <h3 class="text-xl font-bold mb-3 text-white z-10">E-COM Portal</h3>
+                    <p class="text-zinc-400 text-sm leading-relaxed mb-6 flex-grow z-10">
+                        Built feature-rich e-commerce interfaces featuring JWT authorization, advanced product filtering, and an intricate admin dashboard for sales metrics.
+                    </p>
+
+                    <div class="flex flex-wrap gap-2 pt-4 border-t border-zinc-800/80 z-10">
+                        <span
+                            class="text-xs font-mono bg-zinc-950 border border-zinc-800 px-2 py-1 rounded text-sky-300">Angular</span>
+                        <span
+                            class="text-xs font-mono bg-zinc-950 border border-zinc-800 px-2 py-1 rounded text-green-300">Spring
+                            Boot</span>
+                        <span
+                            class="text-xs font-mono bg-zinc-950 border border-zinc-800 px-2 py-1 rounded text-zinc-300">MySQL</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="stack" class="py-24 border-t border-slate-800 bg-slate-900/50">
+    <section id="stack" class="py-24 border-t border-zinc-800/50 bg-[#09090b]">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-xs font-bold text-blue-500 uppercase tracking-widest mb-3">Technical Stack</h2>
-                <h3 class="text-3xl md:text-4xl font-bold text-white">Core Competencies</h3>
+            <div class="mb-16 text-center reveal">
+                <h2 class="text-sm font-mono text-emerald-500 mb-3 flex items-center justify-center gap-2"><i
+                        data-lucide="box" class="w-4 h-4"></i> ~ ./skills --all</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-white">Technology Stack Matrix</h3>
             </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                <div class="glass-card p-6 flex flex-col items-center justify-center gap-3 reveal">
-                    <i data-lucide="layout-template" class="w-8 h-8 text-blue-400"></i>
-                    <span class="text-sm font-semibold text-white">Angular</span>
-                    <span class="text-xs text-slate-400">Frontend</span>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div class="glass-card flex items-center gap-3 p-4 reveal">
+                    <i data-lucide="layout" class="w-5 h-5 text-rose-500"></i>
+                    <div>
+                        <div class="text-sm font-bold text-white">Angular</div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase">Frontend</div>
+                    </div>
                 </div>
-                <div class="glass-card p-6 flex flex-col items-center justify-center gap-3 reveal" style="transition-delay: 0.1s;">
-                    <i data-lucide="coffee" class="w-8 h-8 text-orange-400"></i>
-                    <span class="text-sm font-semibold text-white">Spring Boot</span>
-                    <span class="text-xs text-slate-400">Java Backend</span>
+                <div class="glass-card flex items-center gap-3 p-4 reveal" style="transition-delay: 0.1s;">
+                    <i data-lucide="file-code-2" class="w-5 h-5 text-blue-500"></i>
+                    <div>
+                        <div class="text-sm font-bold text-white">TypeScript</div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase">Language</div>
+                    </div>
                 </div>
-                <div class="glass-card p-6 flex flex-col items-center justify-center gap-3 reveal" style="transition-delay: 0.2s;">
-                    <i data-lucide="file-json" class="w-8 h-8 text-yellow-400"></i>
-                    <span class="text-sm font-semibold text-white">JavaScript/TS</span>
-                    <span class="text-xs text-slate-400">ES6+</span>
+                <div class="glass-card flex items-center gap-3 p-4 reveal" style="transition-delay: 0.2s;">
+                    <i data-lucide="server" class="w-5 h-5 text-green-500"></i>
+                    <div>
+                        <div class="text-sm font-bold text-white">Spring Boot</div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase">Backend</div>
+                    </div>
                 </div>
-                <div class="glass-card p-6 flex flex-col items-center justify-center gap-3 reveal" style="transition-delay: 0.3s;">
-                    <i data-lucide="database" class="w-8 h-8 text-teal-400"></i>
-                    <span class="text-sm font-semibold text-white">MySQL / SQL</span>
-                    <span class="text-xs text-slate-400">Database</span>
+                <div class="glass-card flex items-center gap-3 p-4 reveal" style="transition-delay: 0.3s;">
+                    <i data-lucide="database" class="w-5 h-5 text-rose-400"></i>
+                    <div>
+                        <div class="text-sm font-bold text-white">MySQL</div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase">Database</div>
+                    </div>
                 </div>
-                <div class="glass-card p-6 flex flex-col items-center justify-center gap-3 reveal" style="transition-delay: 0.4s;">
-                    <i data-lucide="git-merge" class="w-8 h-8 text-red-400"></i>
-                    <span class="text-sm font-semibold text-white">Git / Bitbucket</span>
-                    <span class="text-xs text-slate-400">Version Control</span>
+                <div class="glass-card flex items-center gap-3 p-4 reveal" style="transition-delay: 0.4s;">
+                    <i data-lucide="database" class="w-5 h-5 text-cyan-400"></i>
+                    <div>
+                        <div class="text-sm font-bold text-white">PostgreSQL</div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase">Database</div>
+                    </div>
+                </div>
+                <div class="glass-card flex items-center gap-3 p-4 reveal" style="transition-delay: 0.5s;">
+                    <i data-lucide="database" class="w-5 h-5 text-green-400"></i>
+                    <div>
+                        <div class="text-sm font-bold text-white">MongoDB</div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase">Database</div>
+                    </div>
+                </div>
+                <div class="glass-card flex items-center gap-3 p-4 reveal" style="transition-delay: 0.6s;">
+                    <i data-lucide="git-branch" class="w-5 h-5 text-orange-500"></i>
+                    <div>
+                        <div class="text-sm font-bold text-white">Git</div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase">Version Ctrl</div>
+                    </div>
+                </div>
+                <div class="glass-card flex items-center gap-3 p-4 reveal" style="transition-delay: 0.7s;">
+                    <i data-lucide="terminal-square" class="w-5 h-5 text-purple-500"></i>
+                    <div>
+                        <div class="text-sm font-bold text-white">IntelliJ IDEA</div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase">Environment</div>
+                    </div>
+                </div>
+                <div class="glass-card flex items-center gap-3 p-4 reveal" style="transition-delay: 0.8s;">
+                    <i data-lucide="test-tubes" class="w-5 h-5 text-orange-400"></i>
+                    <div>
+                        <div class="text-sm font-bold text-white">Postman</div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase">API Testing</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="py-12 border-t border-slate-800 bg-[#0f172a]">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+    <footer class="py-12 border-t border-zinc-800 bg-zinc-950 relative overflow-hidden">
+        <div
+            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-emerald-500/10 blur-[100px] pointer-events-none">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
             <div class="text-center md:text-left">
-                <h4 class="text-lg font-bold text-white mb-1">Raman Shakya</h4>
-                <p class="text-sm text-slate-500">Noida, Uttar Pradesh, India</p>
+                <div
+                    class="text-xl font-bold tracking-tight flex items-center gap-2 justify-center md:justify-start mb-2">
+                    <i data-lucide="code" class="w-5 h-5 text-emerald-500"></i>
+                    <span class="font-mono text-white">Raman Shakya</span>
+                </div>
+                <p class="text-sm text-zinc-500 font-mono">Status: Compiling scalable solutions in Noida, India.</p>
             </div>
-            
+
             <div class="flex gap-4">
-                <a href="mailto:ramanshakyars12@gmail.com" class="p-3 bg-slate-800 rounded-lg text-slate-400 hover:text-white hover:bg-blue-600 transition-all" aria-label="Email">
-                    <i data-lucide="mail" class="w-5 h-5"></i>
+                <a href="mailto:ramanshakyars12@gmail.com"
+                    class="p-3 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-400 hover:text-white hover:border-emerald-500 transition-all group"
+                    aria-label="Email">
+                    <i data-lucide="mail" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                 </a>
-                <a href="#" class="p-3 bg-slate-800 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-all" aria-label="GitHub">
-                    <i data-lucide="github" class="w-5 h-5"></i>
+                <a href="https://github.com/" target="_blank" rel="noopener noreferrer"
+                    class="p-3 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-400 hover:text-white hover:border-emerald-500 transition-all group"
+                    aria-label="GitHub">
+                    <i data-lucide="github" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                 </a>
-                <a href="https://www.linkedin.com/in/raman-shakya-a164b2249" target="_blank" class="p-3 bg-slate-800 rounded-lg text-slate-400 hover:text-white hover:bg-blue-700 transition-all" aria-label="LinkedIn">
-                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                <a href="https://www.linkedin.com/in/raman-shakya-a164b2249" target="_blank" rel="noopener noreferrer"
+                    class="p-3 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-400 hover:text-white hover:border-emerald-500 transition-all group"
+                    aria-label="LinkedIn">
+                    <i data-lucide="linkedin" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                 </a>
             </div>
         </div>
-        <div class="mt-8 text-center text-xs text-slate-600">
-            &copy; 2026 Raman Shakya. All rights reserved.
+        <div class="mt-8 text-center text-xs font-mono text-zinc-600">
+            /* &copy; 2026 Raman Shakya. All rights reserved. */
         </div>
     </footer>
 
     <script>
-        lucide.createIcons();
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Icons
+            lucide.createIcons();
 
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
+            // Unique variables for IntersectionObserver
+            const scrollRevealOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, scrollRevealOptions);
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            // Observe all elements with 'reveal' class
+            document.querySelectorAll('.reveal').forEach(el => scrollObserver.observe(el));
+        });
     </script>
 </body>
+
 </html>
